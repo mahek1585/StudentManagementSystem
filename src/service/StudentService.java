@@ -12,10 +12,30 @@ public class StudentService {
     // Add student
     public void addStudent(Student student) {
 
-        // Check whether student ID already exists
+        // Check duplicate ID
         if (searchStudent(student.getId()) != null) {
-
             System.out.println("Student ID already exists!");
+            return;
+        }
+
+        // Validate student details
+        if (student.getName() == null || student.getName().trim().isEmpty()) {
+            System.out.println("Student name cannot be empty!");
+            return;
+        }
+
+        if (student.getEmail() == null || student.getEmail().trim().isEmpty()) {
+            System.out.println("Student email cannot be empty!");
+            return;
+        }
+
+        if (student.getCourse() == null || student.getCourse().trim().isEmpty()) {
+            System.out.println("Student course cannot be empty!");
+            return;
+        }
+
+        if (student.getMarks() < 0 || student.getMarks() > 100) {
+            System.out.println("Marks must be between 0 and 100!");
             return;
         }
 
