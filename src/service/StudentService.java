@@ -12,6 +12,13 @@ public class StudentService {
     // Add student
     public void addStudent(Student student) {
 
+        // Check whether student ID already exists
+        if (searchStudent(student.getId()) != null) {
+
+            System.out.println("Student ID already exists!");
+            return;
+        }
+
         students.add(student);
 
         System.out.println("Student added successfully!");
