@@ -36,4 +36,52 @@ public class StudentService {
             System.out.println("-------------------------");
         }
     }
+
+    public Student searchStudent(int id){
+
+        for (Student student : students) {
+
+            if (student.getId() == id) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    
+    public boolean updateStudent(int id, String name, String email,
+                                String course, double marks) {
+
+        Student student = searchStudent(id);
+
+        if (student == null) {
+            return false;
+        }
+
+        student.setName(name);
+        student.setEmail(email);
+        student.setCourse(course);
+        student.setMarks(marks);
+
+        return true;
+    }
+
+    
+    public boolean deleteStudent(int id) {
+
+        Student student = searchStudent(id);
+
+        if (student == null) {
+            return false;
+        }
+
+        students.remove(student);
+
+        return true;
+    }
+
+
+    
+
+
 }
