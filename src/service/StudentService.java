@@ -77,14 +77,41 @@ public class StudentService {
 
     
     public boolean updateStudent(int id, String name, String email,
-                                String course, double marks) {
+                             String course, double marks) {
 
+        // Search existing student
         Student student = searchStudent(id);
 
+        // Check student exists
         if (student == null) {
             return false;
         }
 
+        // Validate name
+        if (name == null || name.trim().isEmpty()) {
+            System.out.println("Student name cannot be empty!");
+            return false;
+        }
+
+        // Validate email
+        if (email == null || email.trim().isEmpty()) {
+            System.out.println("Student email cannot be empty!");
+            return false;
+        }
+
+        // Validate course
+        if (course == null || course.trim().isEmpty()) {
+            System.out.println("Student course cannot be empty!");
+            return false;
+        }
+
+        // Validate marks
+        if (marks < 0 || marks > 100) {
+            System.out.println("Marks must be between 0 and 100!");
+            return false;
+        }
+
+        // Update student details
         student.setName(name);
         student.setEmail(email);
         student.setCourse(course);
@@ -92,7 +119,6 @@ public class StudentService {
 
         return true;
     }
-
     
     public boolean deleteStudent(int id) {
 
