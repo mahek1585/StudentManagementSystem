@@ -76,8 +76,12 @@ public class Main {
 
                     Student student = new Student(id, name, email, course, marks);
 
-                    studentService.addStudent(student);
+                    try {
+                        studentService.addStudent(student);
 
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 }
 

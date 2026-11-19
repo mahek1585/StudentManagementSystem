@@ -34,9 +34,10 @@ public class StudentService {
             return;
         }
 
-        if (student.getMarks() < 0 || student.getMarks() > 100) {
-            System.out.println("Marks must be between 0 and 100!");
-            return;
+       if (student.getMarks() < 0 || student.getMarks() > 100) {
+            throw new IllegalArgumentException(
+                "Marks must be between 0 and 100!"
+            );
         }
 
         students.add(student);
