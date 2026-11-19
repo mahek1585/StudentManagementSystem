@@ -182,8 +182,18 @@ public class Main {
                     String updatedCourse = sc.nextLine();
 
                     System.out.print("Enter new Student Marks: ");
-                    double updatedMarks = sc.nextDouble();
 
+                    double updatedMarks;
+
+                    try {
+                        updatedMarks = sc.nextDouble();
+                        sc.nextLine();
+
+                    } catch (InputMismatchException e) {
+                        System.out.println("Invalid marks! Please enter numbers only.");
+                        sc.nextLine();
+                        break;
+                    }
                     boolean isUpdated = studentService.updateStudent(
                         updateId,
                         updatedName,
@@ -192,10 +202,14 @@ public class Main {
                         updatedMarks
                     );
 
-                    if (isUpdated) {
+                   if (isUpdated) {
                         System.out.println("Student updated successfully!");
-                    } else {
+
+                    } else if (studentService.searchStudent(updateId) == null) {
                         System.out.println("Student not found.");
+
+                    } else {
+                        System.out.println("Student details were not updated. Please check validation messages above.");
                     }
 
                     break;
