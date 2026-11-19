@@ -3,11 +3,20 @@ package service;
 
 import java.util.ArrayList;
 import model.Student;
+import util.FileHelper;
 
 public class StudentService implements StudentOperations {
-    
+
     // Store multiple student objects
     private ArrayList<Student> students = new ArrayList<>();
+
+    // Constructor - Load students when application starts
+    public StudentService() {
+
+    students.addAll(FileHelper.loadStudents());
+
+    System.out.println("Student data loaded successfully!");
+}
 
     // Add student
     public void addStudent(Student student) {
@@ -41,6 +50,8 @@ public class StudentService implements StudentOperations {
         }
 
         students.add(student);
+
+        FileHelper.saveStudents(students);
 
         System.out.println("Student added successfully!");
     }
@@ -125,6 +136,9 @@ public class StudentService implements StudentOperations {
         student.setCourse(course);
         student.setMarks(marks);
 
+        // Save updated student data
+        FileHelper.saveStudents(students);
+
         return true;
     }
     
@@ -137,6 +151,9 @@ public class StudentService implements StudentOperations {
         }
 
         students.remove(student);
+
+        // Save updated student data
+        FileHelper.saveStudents(students);
 
         return true;
     }
