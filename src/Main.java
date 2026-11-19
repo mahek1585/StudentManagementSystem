@@ -22,7 +22,10 @@ public class Main {
             System.out.println("3. Search Student");
             System.out.println("4. Update Student");
             System.out.println("5. Delete Student");
-            System.out.println("6. Exit");
+            System.out.println("6. Sort Students by Name");
+            System.out.println("7. Sort Students by Marks");
+            System.out.println("8. Sort Students by ID");
+            System.out.println("9. Exit");
 
             System.out.print("Enter your choice: ");
 
@@ -224,7 +227,19 @@ public class Main {
                     break;
                 }
 
-                case 6: {
+                case 6:
+                    studentService.sortStudentsByName();
+                    break;
+
+                case 7:
+                    studentService.sortStudentsByMarks();
+                    break;
+
+                case 8:
+                    studentService.sortStudentsById();
+                    break;
+
+                case 9: {
                     System.out.println("Thank you for using Student Management System!");
                     break;
                 }
@@ -235,7 +250,7 @@ public class Main {
                 }
             }
 
-        } while (choice != 6);
+        } while (choice != 9);
 
         sc.close();
     }

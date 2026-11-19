@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.Student;
 import util.FileHelper;
 import java.util.HashMap;
+import java.util.Comparator;
 
 public class StudentService implements StudentOperations {
 
@@ -82,6 +83,41 @@ public class StudentService implements StudentOperations {
         }
     }
 
+    // Sort students by name (A to Z)
+    public void sortStudentsByName() {
+
+        students.sort(
+            Comparator.comparing(Student::getName)
+        );
+
+        System.out.println("Students sorted by name successfully!");
+
+        viewStudents();
+    }
+
+    // Sort students by marks (Highest to Lowest)
+    public void sortStudentsByMarks() {
+
+        students.sort(
+            Comparator.comparingDouble(Student::getMarks).reversed()
+        );
+
+        System.out.println("Students sorted by marks successfully!");
+
+        viewStudents();
+    }
+
+    // Sort students by ID (Ascending)
+    public void sortStudentsById() {
+
+        students.sort(
+            Comparator.comparingInt(Student::getId)
+        );
+
+        System.out.println("Students sorted by ID successfully!");
+
+        viewStudents();
+    }
 
     public Student searchStudent(int id) {
 
