@@ -4,19 +4,28 @@ package service;
 import java.util.ArrayList;
 import model.Student;
 import util.FileHelper;
+import java.util.HashMap;
 
 public class StudentService implements StudentOperations {
 
     // Store multiple student objects
     private ArrayList<Student> students = new ArrayList<>();
+    
+    // Store students using ID as key
+    private HashMap<Integer, Student> studentMap = new HashMap<>();
 
     // Constructor - Load students when application starts
     public StudentService() {
 
-    students.addAll(FileHelper.loadStudents());
+        students.addAll(FileHelper.loadStudents());
 
-    System.out.println("Student data loaded successfully!");
-}
+        // Add loaded students to HashMap
+        for (Student student : students) {
+            studentMap.put(student.getId(), student);
+        }
+
+        System.out.println("Student data loaded successfully!");
+    }
 
     // Add student
     public void addStudent(Student student) {
@@ -51,6 +60,9 @@ public class StudentService implements StudentOperations {
 
         students.add(student);
 
+        // Add student to HashMap
+        studentMap.put(student.getId(), student);
+
         FileHelper.saveStudents(students);
 
         System.out.println("Student added successfully!");
@@ -70,15 +82,11 @@ public class StudentService implements StudentOperations {
         }
     }
 
-    public Student searchStudent(int id){
 
-        for (Student student : students) {
+    public Student searchStudent(int id) {
 
-            if (student.getId() == id) {
-                return student;
-            }
-        }
-        return null;
+        return studentMap.get(id);
+
     }
 
     // Search student by name (Method Overloading)
@@ -151,6 +159,9 @@ public class StudentService implements StudentOperations {
         }
 
         students.remove(student);
+
+        // Remove student from HashMap
+        studentMap.remove(id);
 
         // Save updated student data
         FileHelper.saveStudents(students);
