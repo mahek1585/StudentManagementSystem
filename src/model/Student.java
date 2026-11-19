@@ -1,20 +1,20 @@
 
 package model;
 
-public class Student {
+public class Student extends Person {
 
-    // Student properties
+    // Student-specific properties
     private int id;
-    private String name;
-    private String email;
     private String course;
     private double marks;
 
     // Constructor
-    public Student(int id, String name, String email, String course, double marks) {
+    public Student(int id, String name, String email,
+                   String course, double marks) {
+
+        super(name, email);
+
         this.id = id;
-        this.name = name;
-        this.email = email;
         this.course = course;
         this.marks = marks;
     }
@@ -22,14 +22,6 @@ public class Student {
     // Getter methods
     public int getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getCourse() {
@@ -41,14 +33,6 @@ public class Student {
     }
 
     // Setter methods
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void setCourse(String course) {
         this.course = course;
     }
