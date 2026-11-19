@@ -1,8 +1,8 @@
 
 package model;
 
-public class Person {
-
+public abstract class Person {
+    
     // Common properties
     private String name;
     private String email;
@@ -32,8 +32,5 @@ public class Person {
     }
 
     // Display person details
-    public void display() {
-        System.out.println("Name: " + name);
-        System.out.println("Email: " + email);
-    }
+   public abstract void display();
 }
