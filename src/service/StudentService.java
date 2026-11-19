@@ -4,8 +4,8 @@ package service;
 import java.util.ArrayList;
 import model.Student;
 
-public class StudentService {
-
+public class StudentService implements StudentOperations {
+    
     // Store multiple student objects
     private ArrayList<Student> students = new ArrayList<>();
 
