@@ -40,4 +40,14 @@ public class Student extends Person {
     public void setMarks(double marks) {
         this.marks = marks;
     }
+
+    @Override
+    public void display() {
+
+        System.out.println("ID: " + id);
+        System.out.println("Name: " + getName());
+        System.out.println("Email: " + getEmail());
+        System.out.println("Course: " + course);
+        System.out.println("Marks: " + marks);
+    }
 }

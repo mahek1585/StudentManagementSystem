@@ -89,23 +89,55 @@ public class Main {
                     studentService.viewStudents();
                     break;
                 }
-
+           
                 case 3: {
-                    System.out.print("Enter Student ID to search: ");
+                    System.out.println("\n1. Search by ID");
+                    System.out.println("2. Search by Name");
+                    System.out.print("Choose search option: ");
 
-                    int searchId;
+                    int searchChoice;
 
                     try {
-                        searchId = sc.nextInt();
+                        searchChoice = sc.nextInt();
                         sc.nextLine();
 
                     } catch (InputMismatchException e) {
-                        System.out.println("Invalid Student ID! Please enter numbers only.");
+                        System.out.println("Invalid input! Please enter numbers only.");
                         sc.nextLine();
                         break;
                     }
 
-                    Student foundStudent = studentService.searchStudent(searchId);
+                    Student foundStudent = null;
+
+                    if (searchChoice == 1) {
+
+                        System.out.print("Enter Student ID to search: ");
+
+                        int searchId;
+
+                        try {
+                            searchId = sc.nextInt();
+                            sc.nextLine();
+
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid Student ID! Please enter numbers only.");
+                            sc.nextLine();
+                            break;
+                        }
+
+                        foundStudent = studentService.searchStudent(searchId);
+
+                    } else if (searchChoice == 2) {
+
+                        System.out.print("Enter Student Name to search: ");
+                        String searchName = sc.nextLine();
+
+                        foundStudent = studentService.searchStudent(searchName);
+
+                    } else {
+                        System.out.println("Invalid search option!");
+                        break;
+                    }
 
                     if (foundStudent != null) {
                         System.out.println("\nStudent found!");
@@ -114,6 +146,7 @@ public class Main {
                         System.out.println("Email: " + foundStudent.getEmail());
                         System.out.println("Course: " + foundStudent.getCourse());
                         System.out.println("Marks: " + foundStudent.getMarks());
+
                     } else {
                         System.out.println("Student not found.");
                     }

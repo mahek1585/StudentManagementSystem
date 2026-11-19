@@ -54,13 +54,7 @@ public class StudentService {
         }
 
         for (Student student : students) {
-
-            System.out.println("ID: " + student.getId());
-            System.out.println("Name: " + student.getName());
-            System.out.println("Email: " + student.getEmail());
-            System.out.println("Course: " + student.getCourse());
-            System.out.println("Marks: " + student.getMarks());
-
+            student.display();
             System.out.println("-------------------------");
         }
     }
@@ -73,6 +67,19 @@ public class StudentService {
                 return student;
             }
         }
+        return null;
+    }
+
+    // Search student by name (Method Overloading)
+    public Student searchStudent(String name) {
+
+        for (Student student : students) {
+
+            if (student.getName().equalsIgnoreCase(name)) {
+                return student;
+            }
+        }
+
         return null;
     }
 

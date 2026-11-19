@@ -30,4 +30,10 @@ public class Person {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    // Display person details
+    public void display() {
+        System.out.println("Name: " + name);
+        System.out.println("Email: " + email);
+    }
 }
