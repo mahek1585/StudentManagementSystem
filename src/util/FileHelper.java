@@ -1,31 +1,24 @@
+
 package util;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.Student;
-import java.io.BufferedReader;
-import java.io.FileReader;
 
 public class FileHelper {
 
     private static final String FILE_PATH = "students.txt";
 
-    // Create file
+    // Create file automatically if it does not exist
     public static void createFile() {
 
-        try {
-            File file = new File(FILE_PATH);
+        File file = new File(FILE_PATH);
 
+        try {
             if (file.createNewFile()) {
                 System.out.println("File created successfully!");
-            } else {
-                System.out.println("File already exists.");
             }
-
         } catch (IOException e) {
             System.out.println("Error creating file: " + e.getMessage());
         }
@@ -57,7 +50,7 @@ public class FileHelper {
         }
     }
 
-        // Load students from file
+    // Load students from file
     public static List<Student> loadStudents() {
 
         List<Student> students = new ArrayList<>();
@@ -69,28 +62,47 @@ public class FileHelper {
         }
 
         try (BufferedReader reader =
-                new BufferedReader(new FileReader(FILE_PATH))) {
+                 new BufferedReader(new FileReader(FILE_PATH))) {
 
             String line;
 
             while ((line = reader.readLine()) != null) {
 
-                String[] data = line.split("\\|");
+                try {
+                    String[] data = line.split("\\|", -1);
 
-                int id = Integer.parseInt(data[0]);
-                String name = data[1];
-                String email = data[2];
-                String course = data[3];
-                double marks = Double.parseDouble(data[4]);
+                    if (data.length != 5) {
+                        System.out.println("Skipping invalid student record.");
+                        continue;
+                    }
 
-                Student student = new Student(
-                    id, name, email, course, marks
-                );
+                    int id = Integer.parseInt(data[0]);
+                    String name = data[1];
+                    String email = data[2];
+                    String course = data[3];
+                    double marks = Double.parseDouble(data[4]);
 
-                students.add(student);
+                    if (name.trim().isEmpty()
+                            || email.trim().isEmpty()
+                            || course.trim().isEmpty()
+                            || marks < 0 || marks > 100) {
+
+                        System.out.println("Skipping invalid student data.");
+                        continue;
+                    }
+
+                    Student student = new Student(
+                        id, name, email, course, marks
+                    );
+
+                    students.add(student);
+
+                } catch (NumberFormatException e) {
+                    System.out.println("Skipping corrupted student record.");
+                }
             }
 
-        } catch (IOException | NumberFormatException e) {
+        } catch (IOException e) {
             System.out.println("Error loading student data: " + e.getMessage());
         }
 
