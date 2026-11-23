@@ -46,5 +46,14 @@ public class StudentDAOTest {
         } else {
             System.out.println("Student update failed!");
         }
+
+        System.out.println("\n===== DELETE STUDENT =====");
+        boolean deleteResult = studentDAO.deleteStudent(101);
+
+        if (deleteResult) {
+            System.out.println("Student deleted successfully!");
+        } else {
+            System.out.println("Student deletion failed!");
+        }
     }
 }
