@@ -25,11 +25,26 @@ public class StudentDAOTest {
         //     System.out.println("Failed to add student.");
         // }
         System.out.println("\n===== ALL STUDENTS =====");
+        studentDAO.getAllStudents();
 
-studentDAO.getAllStudents();
+        System.out.println("\n===== SEARCH STUDENT =====");
+        studentDAO.searchStudentById(101);
 
-System.out.println("\n===== SEARCH STUDENT =====");
+        System.out.println("\n===== UPDATE STUDENT =====");
+        Student updatedStudent = new Student(
+                101,
+                "Rahul Sharma",
+                "rahul@gmail.com",
+                "Java Full Stack",
+                90.0
+        );
 
-studentDAO.searchStudentById(101);
+        boolean updateResult = studentDAO.updateStudent(updatedStudent);
+
+        if (updateResult) {
+            System.out.println("Student updated successfully!");
+        } else {
+            System.out.println("Student update failed!");
+        }
     }
 }
