@@ -33,4 +33,44 @@ public class StudentDAO {
             return false;
         }
     }
+     
+    public void getAllStudents() {
+
+        String sql = "SELECT * FROM students";
+
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            java.sql.ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            boolean found = false;
+
+            while (resultSet.next()) {
+
+                found = true;
+
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String email = resultSet.getString("email");
+                String course = resultSet.getString("course");
+                double marks = resultSet.getDouble("marks");
+
+                System.out.println("ID: " + id);
+                System.out.println("Name: " + name);
+                System.out.println("Email: " + email);
+                System.out.println("Course: " + course);
+                System.out.println("Marks: " + marks);
+                System.out.println("-------------------------");
+            }
+
+            if (!found) {
+                System.out.println("No students found!");
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println("Error fetching students: " + e.getMessage());
+        }
+    }
+
+
 }

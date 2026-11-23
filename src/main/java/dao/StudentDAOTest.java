@@ -17,12 +17,15 @@ public class StudentDAOTest {
                 85.5
         );
 
-        boolean result = studentDAO.addStudent(student);
+        // boolean result = studentDAO.addStudent(student);
 
-        if (result) {
-            System.out.println("Student added to database successfully!");
-        } else {
-            System.out.println("Failed to add student.");
-        }
+        // if (result) {
+        //     System.out.println("Student added to database successfully!");
+        // } else {
+        //     System.out.println("Failed to add student.");
+        // }
+        System.out.println("\n===== ALL STUDENTS =====");
+
+studentDAO.getAllStudents();
     }
 }
