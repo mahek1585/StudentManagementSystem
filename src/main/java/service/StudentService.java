@@ -3,30 +3,15 @@ package service;
 
 import java.util.ArrayList;
 import model.Student;
-import util.FileHelper;
-import java.util.HashMap;
 import java.util.Comparator;
+import dao.StudentDAO;
 
 public class StudentService implements StudentOperations {
 
-    // Store multiple student objects
-    private ArrayList<Student> students = new ArrayList<>();
+  
+    private StudentDAO studentDAO = new StudentDAO();
     
-    // Store students using ID as key
-    private HashMap<Integer, Student> studentMap = new HashMap<>();
-
-    // Constructor - Load students when application starts
-    public StudentService() {
-
-        students.addAll(FileHelper.loadStudents());
-
-        // Add loaded students to HashMap
-        for (Student student : students) {
-            studentMap.put(student.getId(), student);
-        }
-
-        System.out.println("Student data loaded successfully!");
-    }
+    
 
     // Add student
     public void addStudent(Student student) {
@@ -59,18 +44,22 @@ public class StudentService implements StudentOperations {
             );
         }
 
-        students.add(student);
+        boolean added = studentDAO.addStudent(student);
 
-        // Add student to HashMap
-        studentMap.put(student.getId(), student);
-
-        FileHelper.saveStudents(students);
-
-        System.out.println("Student added successfully!");
+        if (added) {
+            System.out.println("Student added successfully!");
+        } else {
+            System.out.println("Failed to add student!");
+        }
     }
 
     // View all students
+    @Override
     public void viewStudents() {
+
+        ArrayList<Student> students = new ArrayList<>(
+            studentDAO.getAllStudents()
+        );
 
         if (students.isEmpty()) {
             System.out.println("No students found.");
@@ -86,17 +75,27 @@ public class StudentService implements StudentOperations {
     // Sort students by name (A to Z)
     public void sortStudentsByName() {
 
-        students.sort(
-            Comparator.comparing(Student::getName)
+            ArrayList<Student> students = new ArrayList<>(
+                studentDAO.getAllStudents()
+            );
+
+            students.sort(
+                Comparator.comparing(Student::getName)
+            );
+
+            System.out.println("Students sorted by name successfully!");
+
+            for (Student student : students) {
+                student.display();
+                System.out.println("-------------------------");
+            }
+        }
+        // Sort students by marks (Highest to Lowest)
+        public void sortStudentsByMarks() {
+
+        ArrayList<Student> students = new ArrayList<>(
+            studentDAO.getAllStudents()
         );
-
-        System.out.println("Students sorted by name successfully!");
-
-        viewStudents();
-    }
-
-    // Sort students by marks (Highest to Lowest)
-    public void sortStudentsByMarks() {
 
         students.sort(
             Comparator.comparingDouble(Student::getMarks).reversed()
@@ -104,11 +103,17 @@ public class StudentService implements StudentOperations {
 
         System.out.println("Students sorted by marks successfully!");
 
-        viewStudents();
+        for (Student student : students) {
+            student.display();
+            System.out.println("-------------------------");
+        }
     }
-
     // Sort students by ID (Ascending)
     public void sortStudentsById() {
+
+        ArrayList<Student> students = new ArrayList<>(
+            studentDAO.getAllStudents()
+        );
 
         students.sort(
             Comparator.comparingInt(Student::getId)
@@ -116,19 +121,22 @@ public class StudentService implements StudentOperations {
 
         System.out.println("Students sorted by ID successfully!");
 
-        viewStudents();
+        for (Student student : students) {
+            student.display();
+            System.out.println("-------------------------");
+        }
     }
 
+    @Override
     public Student searchStudent(int id) {
-
-        return studentMap.get(id);
-
+        return studentDAO.searchStudentById(id);
     }
 
     // Search student by name (Method Overloading)
+    @Override
     public Student searchStudent(String name) {
 
-        for (Student student : students) {
+        for (Student student : studentDAO.getAllStudents()) {
 
             if (student.getName().equalsIgnoreCase(name)) {
                 return student;
@@ -174,18 +182,14 @@ public class StudentService implements StudentOperations {
             return false;
         }
 
-        // Update student details
-        student.setName(name);
-        student.setEmail(email);
-        student.setCourse(course);
-        student.setMarks(marks);
+            Student updatedStudent = new Student(
+                id, name, email, course, marks
+            );
 
-        // Save updated student data
-        FileHelper.saveStudents(students);
-
-        return true;
-    }
+            return studentDAO.updateStudent(updatedStudent);
+        }
     
+    @Override
     public boolean deleteStudent(int id) {
 
         Student student = searchStudent(id);
@@ -194,17 +198,8 @@ public class StudentService implements StudentOperations {
             return false;
         }
 
-        students.remove(student);
-
-        // Remove student from HashMap
-        studentMap.remove(id);
-
-        // Save updated student data
-        FileHelper.saveStudents(students);
-
-        return true;
+        return studentDAO.deleteStudent(id);
     }
-
 
     
 

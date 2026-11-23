@@ -3,10 +3,14 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import model.Student;
 import util.DBConnection;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentDAO {
 
@@ -34,75 +38,69 @@ public class StudentDAO {
         }
     }
      
-    public void getAllStudents() {
+    public List<Student> getAllStudents() {
+
+        List<Student> students = new ArrayList<>();
 
         String sql = "SELECT * FROM students";
 
         try (Connection connection = DBConnection.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            java.sql.ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            boolean found = false;
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
 
-                found = true;
+                Student student = new Student(
+                    resultSet.getInt("id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("email"),
+                    resultSet.getString("course"),
+                    resultSet.getDouble("marks")
+                );
 
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                String email = resultSet.getString("email");
-                String course = resultSet.getString("course");
-                double marks = resultSet.getDouble("marks");
-
-                System.out.println("ID: " + id);
-                System.out.println("Name: " + name);
-                System.out.println("Email: " + email);
-                System.out.println("Course: " + course);
-                System.out.println("Marks: " + marks);
-                System.out.println("-------------------------");
-            }
-
-            if (!found) {
-                System.out.println("No students found!");
+                students.add(student);
             }
 
         } catch (SQLException e) {
-
-            System.out.println("Error fetching students: " + e.getMessage());
+            System.out.println("Error retrieving students: " + e.getMessage());
         }
+
+        return students;
     }
 
-    public void searchStudentById(int id) {
+    public Student searchStudentById(int id) {
 
         String sql = "SELECT * FROM students WHERE id = ?";
 
         try (Connection connection = DBConnection.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(sql)) {
 
             preparedStatement.setInt(1, id);
 
-            try (java.sql.ResultSet resultSet = preparedStatement.executeQuery()) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 if (resultSet.next()) {
 
-                    System.out.println("Student Found!");
-                    System.out.println("ID: " + resultSet.getInt("id"));
-                    System.out.println("Name: " + resultSet.getString("name"));
-                    System.out.println("Email: " + resultSet.getString("email"));
-                    System.out.println("Course: " + resultSet.getString("course"));
-                    System.out.println("Marks: " + resultSet.getDouble("marks"));
+                    Student student = new Student(
+                        resultSet.getInt("id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("email"),
+                        resultSet.getString("course"),
+                        resultSet.getDouble("marks")
+                    );
 
-                } else {
-                    System.out.println("Student not found!");
+                    return student;
                 }
             }
 
         } catch (SQLException e) {
-
             System.out.println("Error searching student: " + e.getMessage());
         }
-    }
 
+        return null;
+    }
 
     public boolean updateStudent(Student student) {
 
@@ -149,7 +147,7 @@ public class StudentDAO {
         }
     }
 
-
+    
 
 
 }
