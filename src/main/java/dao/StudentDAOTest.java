@@ -27,5 +27,9 @@ public class StudentDAOTest {
         System.out.println("\n===== ALL STUDENTS =====");
 
 studentDAO.getAllStudents();
+
+System.out.println("\n===== SEARCH STUDENT =====");
+
+studentDAO.searchStudentById(101);
     }
 }

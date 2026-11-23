@@ -72,5 +72,37 @@ public class StudentDAO {
         }
     }
 
+    public void searchStudentById(int id) {
+
+        String sql = "SELECT * FROM students WHERE id = ?";
+
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, id);
+
+            try (java.sql.ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                if (resultSet.next()) {
+
+                    System.out.println("Student Found!");
+                    System.out.println("ID: " + resultSet.getInt("id"));
+                    System.out.println("Name: " + resultSet.getString("name"));
+                    System.out.println("Email: " + resultSet.getString("email"));
+                    System.out.println("Course: " + resultSet.getString("course"));
+                    System.out.println("Marks: " + resultSet.getDouble("marks"));
+
+                } else {
+                    System.out.println("Student not found!");
+                }
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println("Error searching student: " + e.getMessage());
+        }
+    }
+
+
 
 }
