@@ -44,6 +44,7 @@ public class StudentService implements StudentOperations {
             );
         }
 
+        try {
         boolean added = studentDAO.addStudent(student);
 
         if (added) {
@@ -51,30 +52,40 @@ public class StudentService implements StudentOperations {
         } else {
             System.out.println("Failed to add student!");
         }
+
+        } catch (java.sql.SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
     }
 
     // View all students
-    @Override
+   @Override
     public void viewStudents() {
 
-        ArrayList<Student> students = new ArrayList<>(
-            studentDAO.getAllStudents()
-        );
+        try {
+            ArrayList<Student> students = new ArrayList<>(
+                studentDAO.getAllStudents()
+            );
 
-        if (students.isEmpty()) {
-            System.out.println("No students found.");
-            return;
-        }
+            if (students.isEmpty()) {
+                System.out.println("No students found.");
+                return;
+            }
 
-        for (Student student : students) {
-            student.display();
-            System.out.println("-------------------------");
+            for (Student student : students) {
+                student.display();
+                System.out.println("-------------------------");
+            }
+
+        } catch (java.sql.SQLException e) {
+            System.out.println("Database error while retrieving students: " + e.getMessage());
         }
     }
 
     // Sort students by name (A to Z)
     public void sortStudentsByName() {
 
+        try {
             ArrayList<Student> students = new ArrayList<>(
                 studentDAO.getAllStudents()
             );
@@ -83,64 +94,107 @@ public class StudentService implements StudentOperations {
                 Comparator.comparing(Student::getName)
             );
 
+            if (students.isEmpty()) {
+                System.out.println("No students found.");
+                return;
+            }
+
             System.out.println("Students sorted by name successfully!");
 
             for (Student student : students) {
                 student.display();
                 System.out.println("-------------------------");
             }
-        }
-        // Sort students by marks (Highest to Lowest)
-        public void sortStudentsByMarks() {
 
-        ArrayList<Student> students = new ArrayList<>(
-            studentDAO.getAllStudents()
-        );
-
-        students.sort(
-            Comparator.comparingDouble(Student::getMarks).reversed()
-        );
-
-        System.out.println("Students sorted by marks successfully!");
-
-        for (Student student : students) {
-            student.display();
-            System.out.println("-------------------------");
+        } catch (java.sql.SQLException e) {
+            System.out.println("Database error while sorting students: " + e.getMessage());
         }
     }
+
+    // Sort students by marks (Highest to Lowest)
+    public void sortStudentsByMarks() {
+
+        try {
+            ArrayList<Student> students = new ArrayList<>(
+                studentDAO.getAllStudents()
+            );
+
+            if (students.isEmpty()) {
+                System.out.println("No students found.");
+                return;
+            }
+
+            students.sort(
+                Comparator.comparingDouble(Student::getMarks).reversed()
+            );
+
+            System.out.println("Students sorted by marks successfully!");
+
+            for (Student student : students) {
+                student.display();
+                System.out.println("-------------------------");
+            }
+
+        } catch (java.sql.SQLException e) {
+            System.out.println("Database error while sorting students: " + e.getMessage());
+        }
+    }
+
     // Sort students by ID (Ascending)
     public void sortStudentsById() {
 
-        ArrayList<Student> students = new ArrayList<>(
-            studentDAO.getAllStudents()
-        );
+        try {
+            ArrayList<Student> students = new ArrayList<>(
+                studentDAO.getAllStudents()
+            );
 
-        students.sort(
-            Comparator.comparingInt(Student::getId)
-        );
+            if (students.isEmpty()) {
+                System.out.println("No students found.");
+                return;
+            }
 
-        System.out.println("Students sorted by ID successfully!");
+            students.sort(
+                Comparator.comparingInt(Student::getId)
+            );
 
-        for (Student student : students) {
-            student.display();
-            System.out.println("-------------------------");
+            System.out.println("Students sorted by ID successfully!");
+
+            for (Student student : students) {
+                student.display();
+                System.out.println("-------------------------");
+            }
+
+        } catch (java.sql.SQLException e) {
+            System.out.println("Database error while sorting students: " + e.getMessage());
         }
     }
 
     @Override
     public Student searchStudent(int id) {
-        return studentDAO.searchStudentById(id);
+
+        try {
+            return studentDAO.searchStudentById(id);
+
+        } catch (java.sql.SQLException e) {
+            System.out.println("Database error while searching student: " + e.getMessage());
+            return null;
+        }
     }
 
     // Search student by name (Method Overloading)
     @Override
     public Student searchStudent(String name) {
 
-        for (Student student : studentDAO.getAllStudents()) {
+        try {
+            for (Student student : studentDAO.getAllStudents()) {
 
-            if (student.getName().equalsIgnoreCase(name)) {
-                return student;
+                if (student.getName().equalsIgnoreCase(name)) {
+                    return student;
+                }
             }
+
+        } catch (java.sql.SQLException e) {
+            System.out.println("Database error while searching student: " + e.getMessage());
         }
 
         return null;
@@ -150,13 +204,7 @@ public class StudentService implements StudentOperations {
     public boolean updateStudent(int id, String name, String email,
                              String course, double marks) {
 
-        // Search existing student
-        Student student = searchStudent(id);
-
-        // Check student exists
-        if (student == null) {
-            return false;
-        }
+       
 
         // Validate name
         if (name == null || name.trim().isEmpty()) {
@@ -186,19 +234,25 @@ public class StudentService implements StudentOperations {
                 id, name, email, course, marks
             );
 
-            return studentDAO.updateStudent(updatedStudent);
+            try {
+                return studentDAO.updateStudent(updatedStudent);
+
+            } catch (java.sql.SQLException e) {
+                System.out.println("Database error while updating student: " + e.getMessage());
+                return false;
+            }
         }
     
     @Override
     public boolean deleteStudent(int id) {
 
-        Student student = searchStudent(id);
+        try {
+            return studentDAO.deleteStudent(id);
 
-        if (student == null) {
+        } catch (java.sql.SQLException e) {
+            System.out.println("Database error while deleting student: " + e.getMessage());
             return false;
         }
-
-        return studentDAO.deleteStudent(id);
     }
 
     

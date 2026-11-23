@@ -1,11 +1,11 @@
-
 package dao;
 
 import model.Student;
+import java.sql.SQLException;
 
 public class StudentDAOTest {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         StudentDAO studentDAO = new StudentDAO();
 

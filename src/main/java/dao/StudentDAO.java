@@ -14,95 +14,76 @@ import java.util.List;
 
 public class StudentDAO {
 
-    public boolean addStudent(Student student) {
+        private Student mapStudent(ResultSet resultSet) throws SQLException {
 
-        String sql = "INSERT INTO students (id, name, email, course, marks) VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection connection = DBConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setInt(1, student.getId());
-            preparedStatement.setString(2, student.getName());
-            preparedStatement.setString(3, student.getEmail());
-            preparedStatement.setString(4, student.getCourse());
-            preparedStatement.setDouble(5, student.getMarks());
-
-            int rowsInserted = preparedStatement.executeUpdate();
-
-            return rowsInserted > 0;
-
-        } catch (SQLException e) {
-
-            System.out.println("Error adding student: " + e.getMessage());
-            return false;
-        }
+        return new Student(
+            resultSet.getInt("id"),
+            resultSet.getString("name"),
+            resultSet.getString("email"),
+            resultSet.getString("course"),
+            resultSet.getDouble("marks")
+        );
     }
+
+        public boolean addStudent(Student student) throws SQLException {
+
+            String sql = "INSERT INTO students (id, name, email, course, marks) VALUES (?, ?, ?, ?, ?)";
+
+            try (Connection connection = DBConnection.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+                preparedStatement.setInt(1, student.getId());
+                preparedStatement.setString(2, student.getName());
+                preparedStatement.setString(3, student.getEmail());
+                preparedStatement.setString(4, student.getCourse());
+                preparedStatement.setDouble(5, student.getMarks());
+
+                int rowsInserted = preparedStatement.executeUpdate();
+
+                return rowsInserted > 0;
+            }
+    }
+
+        
      
-    public List<Student> getAllStudents() {
+    public List<Student> getAllStudents() throws SQLException {
 
         List<Student> students = new ArrayList<>();
 
         String sql = "SELECT * FROM students";
 
         try (Connection connection = DBConnection.getConnection();
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
-
-                Student student = new Student(
-                    resultSet.getInt("id"),
-                    resultSet.getString("name"),
-                    resultSet.getString("email"),
-                    resultSet.getString("course"),
-                    resultSet.getDouble("marks")
-                );
-
-                students.add(student);
+                students.add(mapStudent(resultSet));
             }
-
-        } catch (SQLException e) {
-            System.out.println("Error retrieving students: " + e.getMessage());
         }
 
         return students;
     }
 
-    public Student searchStudentById(int id) {
+    public Student searchStudentById(int id) throws SQLException {
 
         String sql = "SELECT * FROM students WHERE id = ?";
 
         try (Connection connection = DBConnection.getConnection();
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(sql)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setInt(1, id);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
                 if (resultSet.next()) {
-
-                    Student student = new Student(
-                        resultSet.getInt("id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("email"),
-                        resultSet.getString("course"),
-                        resultSet.getDouble("marks")
-                    );
-
-                    return student;
+                    return mapStudent(resultSet);
                 }
             }
-
-        } catch (SQLException e) {
-            System.out.println("Error searching student: " + e.getMessage());
         }
 
         return null;
     }
-
-    public boolean updateStudent(Student student) {
+    public boolean updateStudent(Student student) throws SQLException {
 
         String sql = "UPDATE students SET name = ?, email = ?, course = ?, marks = ? WHERE id = ?";
 
@@ -118,16 +99,11 @@ public class StudentDAO {
             int rowsUpdated = preparedStatement.executeUpdate();
 
             return rowsUpdated > 0;
-
-        } catch (SQLException e) {
-
-            System.out.println("Error updating student: " + e.getMessage());
-            return false;
         }
     }
 
 
-    public boolean deleteStudent(int id) {
+    public boolean deleteStudent(int id) throws SQLException {
 
         String sql = "DELETE FROM students WHERE id = ?";
 
@@ -139,11 +115,6 @@ public class StudentDAO {
             int rowsDeleted = preparedStatement.executeUpdate();
 
             return rowsDeleted > 0;
-
-        } catch (SQLException e) {
-
-            System.out.println("Error deleting student: " + e.getMessage());
-            return false;
         }
     }
 
