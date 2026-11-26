@@ -1,20 +1,40 @@
-# Database Connection Details
 
-## Database
-Database Name: student_management_system
-Host: localhost
-Port: 3306
+# Database Setup - Student Management System
 
-## MySQL User
-Username: sms_app
+## 1. Database Details
 
-## Environment Variables
-DB_USERNAME
-DB_PASSWORD
+- Database Name: student_management_system
+- Host: localhost
+- Port: 3306
+- Database User: sms_app
 
-## Java Connection File
+## 2. Environment Variables
+
+Our application uses Windows Environment Variables to store database credentials.
+
+- DB_USERNAME = sms_app
+- DB_PASSWORD = SmsApp@2026#
+
+## 3. DB Connection File
+
+File Location:
+
 src/main/java/util/DBConnection.java
 
-## Important
-Database password is stored in Windows Environment Variables.
-It is not hardcoded in Java source code.
+## 4. Database Connection URL
+
+jdbc:mysql://localhost:3306/student_management_system
+
+## 5. Technologies Used
+
+- Java
+- JDBC
+- MySQL
+- Maven
+- JUnit 5
+
+## 6. Important Notes
+
+- Never hardcode database passwords in Java files.
+- Never upload passwords to GitHub.
+- If environment variables are missing, database connection will fail.
