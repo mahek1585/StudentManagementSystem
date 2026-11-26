@@ -10,3 +10,4 @@ students.txt
 
 # Environment variables and secrets
 .env
+.env.*
